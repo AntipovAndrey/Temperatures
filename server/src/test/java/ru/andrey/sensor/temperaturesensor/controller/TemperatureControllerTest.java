@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.andrey.sensor.temperaturesensor.service.TemperatureService;
 
@@ -26,8 +25,6 @@ class TemperatureControllerTest {
 
     @InjectMocks
     private TemperatureController controller;
-
-    private RequestBuilder requestBuilder;
 
     private String validRequestBody = "{\n" +
             "  \"lat\": 87.34,\n" +

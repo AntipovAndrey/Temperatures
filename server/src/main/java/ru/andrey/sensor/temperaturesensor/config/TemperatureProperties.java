@@ -9,7 +9,10 @@ import ru.andrey.sensor.temperaturesensor.model.Scale;
 @Configuration
 @ConfigurationProperties(prefix = "temperature")
 @Getter
+@Setter
 public class TemperatureProperties {
+
+    private int maxRecords;
 
     private final Defaults defaults = new Defaults();
 
