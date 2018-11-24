@@ -26,6 +26,9 @@ class TemperatureServiceTest {
     @Mock
     private TemperatureRepository repository;
 
+    @Mock
+    private LocationService locationService;
+
     private TemperatureRequest temperatureRequest;
 
     @InjectMocks
@@ -45,6 +48,8 @@ class TemperatureServiceTest {
                 return defaultScale;
             }
         });
+
+        when(locationService.findCityByCoordinates(anyDouble(), anyDouble())).thenReturn("CIty");
 
         temperatureRequest = new TemperatureRequest() {{
             setLat(BigDecimal.valueOf(0));

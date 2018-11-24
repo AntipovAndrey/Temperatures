@@ -12,14 +12,14 @@ import java.math.BigDecimal;
 public class TemperatureRequest {
 
     @NotNull
-    @DecimalMin("-90.0")
-    @DecimalMax("90.0")
-    private BigDecimal lat;
-
-    @NotNull
     @DecimalMin("-180.0")
     @DecimalMax("180.0")
     private BigDecimal lon;
+
+    @NotNull
+    @DecimalMin("-90.0")
+    @DecimalMax("90.0")
+    private BigDecimal lat;
 
     @Pattern(regexp = "^(C|F|K|)$")
     private String scale = "";

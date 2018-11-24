@@ -1,8 +1,10 @@
 package ru.andrey.sensor.temperaturesensor.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import ru.andrey.sensor.temperaturesensor.config.TemperatureProperties;
@@ -21,33 +23,44 @@ public class TemperatureService {
 
     private final TemperatureProperties temperatureProperties;
     private final TemperatureRepository temperatureRepository;
+    private final LocationService locationService;
 
     @Autowired
     public TemperatureService(TemperatureProperties temperatureProperties,
-                              TemperatureRepository temperatureRepository) {
+                              TemperatureRepository temperatureRepository,
+                              LocationService locationService) {
         this.temperatureProperties = temperatureProperties;
         this.temperatureRepository = temperatureRepository;
+        this.locationService = locationService;
     }
 
     public void store(TemperatureRequest temperatureRequest) {
         Temperature temperatureMessage = Temperature.builder()
                 .lat(temperatureRequest.getLat().doubleValue())
                 .lon(temperatureRequest.getLon().doubleValue())
-                .temperature(convertTemperature(temperatureRequest.getTemperature(), temperatureRequest.getScale()))
+                .temperature(scaled(temperatureRequest.getTemperature(), temperatureRequest.getScale()))
                 .time(Instant.now())
+                .city(getCity(temperatureRequest.getLon().doubleValue(), temperatureRequest.getLat().doubleValue()))
                 .build();
 
         temperatureRepository.save(temperatureMessage);
     }
 
     public List<TemperatureResponse> getLatest() {
-        return temperatureRepository.findAll(limitSort())
-                .stream()
-                .map(this::fromTemperature)
-                .collect(Collectors.toList());
+        final Page<Temperature> list = temperatureRepository.findAll(limitSort());
+        return transformToResponse(list);
     }
 
-    private double convertTemperature(Double temperature, String scaleString) {
+    public List<TemperatureResponse> getLatestInCity(double lon, double lat) {
+        String city = getCity(lon, lat);
+        if (city == null) {
+            return getLatest();
+        }
+        final Page<Temperature> list = temperatureRepository.findByCity(city, limitSort());
+        return transformToResponse(list);
+    }
+
+    private double scaled(Double temperature, String scaleString) {
         Scale scale = StringUtils.isEmpty(scaleString) ?
                 temperatureProperties.getDefaults().getScale() : Scale.valueOf(scaleString);
         return scale.toCelsius(temperature);
@@ -60,6 +73,16 @@ public class TemperatureService {
                 .temperature(temperature.getTemperature())
                 .time(temperature.getTime())
                 .build();
+    }
+
+    private List<TemperatureResponse> transformToResponse(Streamable<Temperature> list) {
+        return list.stream()
+                .map(this::fromTemperature)
+                .collect(Collectors.toList());
+    }
+
+    private String getCity(double lon, double lat) {
+        return locationService.findCityByCoordinates(lon, lat);
     }
 
     private PageRequest limitSort() {

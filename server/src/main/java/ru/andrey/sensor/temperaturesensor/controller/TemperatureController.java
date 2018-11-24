@@ -28,7 +28,11 @@ public class TemperatureController {
     }
 
     @GetMapping
-    public List<TemperatureResponse> getLastRecords() {
-        return temperatureService.getLatest();
+    public List<TemperatureResponse> getLastRecords(@RequestParam(value = "lon", required = false) Double lon,
+                                                    @RequestParam(value = "lat", required = false) Double lat) {
+        if (lon == null || lat == null) {
+            return temperatureService.getLatest();
+        }
+        return temperatureService.getLatestInCity(lon, lat);
     }
 }

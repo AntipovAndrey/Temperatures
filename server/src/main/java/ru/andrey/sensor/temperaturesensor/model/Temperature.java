@@ -17,5 +17,6 @@ public class Temperature {
     private double lat;
     private double lon;
     private double temperature;
+    private String city;
     private Instant time;
 }
