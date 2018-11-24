@@ -22,10 +22,7 @@ public class LocationService {
 
     public String findCityByCoordinates(double lon, double lat) {
         RestTemplate restTemplate = new RestTemplate();
-        System.out.println(formUrl(lon, lat));
-
         String json = restTemplate.getForObject(formUrl(lon, lat), String.class);
-
         return extractCity(json).orElse(null);
     }
 
