@@ -1,0 +1,14 @@
+POST http://localhost:8080/temperatures
+Content-Type: application/json
+
+{
+  "lon": 30.34,
+  "lat": 59.9,
+  "temperature": 21
+}
+
+###
+
+GET http://localhost:8080/temperatures?lat=3&lon=89
+
+###
