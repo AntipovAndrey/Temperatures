@@ -14,8 +14,7 @@ public class Temperature {
 
     @Id
     private String id;
-    private double lat;
-    private double lon;
+    private Coordinate coordinate;
     private double temperature;
     private String city;
     private Instant time;

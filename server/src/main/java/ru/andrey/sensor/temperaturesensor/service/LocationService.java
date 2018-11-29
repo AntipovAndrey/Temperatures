@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.andrey.sensor.temperaturesensor.config.GeoLocationProperties;
+import ru.andrey.sensor.temperaturesensor.model.Coordinate;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -20,10 +21,10 @@ public class LocationService {
         this.geoServiceProperties = geoServiceProperties;
     }
 
-    public String findCityByCoordinates(double lon, double lat) {
+    public Optional<String> findCityByCoordinates(Coordinate coordinate) {
         RestTemplate restTemplate = new RestTemplate();
-        String json = restTemplate.getForObject(formUrl(lon, lat), String.class);
-        return extractCity(json).orElse(null);
+        String json = restTemplate.getForObject(formUrl(coordinate), String.class);
+        return extractCity(json);
     }
 
     private Optional<String> extractCity(String json) {
@@ -43,11 +44,11 @@ public class LocationService {
         }
     }
 
-    private String formUrl(double lon, double lat) {
+    private String formUrl(Coordinate coordinate) {
         return String.format("%s?q=%s,%s&key=%s&language=en",
                 geoServiceProperties.getBaseUrl(),
-                lat,
-                lon,
+                coordinate.getLat(),
+                coordinate.getLon(),
                 geoServiceProperties.getKey());
     }
 }

@@ -1,4 +1,4 @@
-package ru.andrey.sensor.temperaturesensor.controller.request;
+package ru.andrey.sensor.temperaturesensor.controller.response;
 
 import lombok.Builder;
 import lombok.Data;
