@@ -7,9 +7,9 @@ const AddTemperatureComponent = props => {
     const [scale, setScale] = useState('');
     const [temperature, setTemperature] = useState(0);
 
-    const onFormSubmit = (event, data) => {
+    const onFormSubmit = event => {
         event.preventDefault();
-        props.onSubmit(data);
+        props.onSubmit({lat, lon, temperature, scale});
     };
 
     return (
@@ -41,7 +41,7 @@ const AddTemperatureComponent = props => {
                 </div>
             </form>
             <div>
-                <button onClick={e => onFormSubmit(e, {lat, lon, temperature, scale})}
+                <button onClick={onFormSubmit}
                         className="ui submit button">
                     Add
                 </button>
