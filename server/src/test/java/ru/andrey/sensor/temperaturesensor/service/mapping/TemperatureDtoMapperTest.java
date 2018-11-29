@@ -9,12 +9,15 @@ import org.mockito.Spy;
 import ru.andrey.sensor.temperaturesensor.config.TemperatureProperties;
 import ru.andrey.sensor.temperaturesensor.controller.request.CoordinateRequest;
 import ru.andrey.sensor.temperaturesensor.controller.request.TemperatureRequest;
+import ru.andrey.sensor.temperaturesensor.controller.response.TemperatureResponse;
 import ru.andrey.sensor.temperaturesensor.model.Scale;
 import ru.andrey.sensor.temperaturesensor.model.Temperature;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.mockito.Mockito.*;
 
@@ -33,6 +36,8 @@ class TemperatureDtoMapperTest {
 
     private TemperatureRequest temperatureRequest;
 
+    private CoordinateRequest coordinateRequest;
+
     @BeforeEach
     void setUp() {
         coordinateDtoMapper = new CoordinateDtoMapper();
@@ -48,12 +53,13 @@ class TemperatureDtoMapperTest {
             }
         });
 
+        coordinateRequest = new CoordinateRequest() {{
+            setLat(BigDecimal.ONE);
+            setLon(BigDecimal.TEN);
+        }};
+
         temperatureRequest = new TemperatureRequest() {{
-            setCoordinateRequest(
-                    new CoordinateRequest() {{
-                        setLat(BigDecimal.valueOf(0));
-                        setLon(BigDecimal.valueOf(0));
-                    }});
+            setCoordinateRequest(coordinateRequest);
             setTemperature(42D);
             setScale("F");
         }};
@@ -80,5 +86,27 @@ class TemperatureDtoMapperTest {
         double converted = Scale.valueOf(temperatureRequest.getScale())
                 .toCelsius(temperatureRequest.getTemperature());
         assertThat(model.getTemperature(), closeTo(converted, 0.1));
+    }
+
+    @Test
+    void test_mapped_model_contains_all_fields() {
+        Instant now = Instant.now();
+        temperatureRequest.setScale(defaultScale.toString());
+        Temperature model = mapper.toModel(temperatureRequest);
+
+        assertThat(model.getTemperature(), closeTo(temperatureRequest.getTemperature(), 0.0001));
+        assertThat(model.getCoordinate().getLat(), closeTo(coordinateRequest.getLat().doubleValue(), 0.0001));
+        assertThat(model.getCoordinate().getLon(), closeTo(coordinateRequest.getLon().doubleValue(), 0.0001));
+        assertThat(model.getTime().plusMillis(1).isAfter(now), is(true));
+    }
+
+    @Test
+    void test_mapped_response_contains_all_fields() {
+        temperatureRequest.setScale(defaultScale.toString());
+        TemperatureResponse res = mapper.fromModel(mapper.toModel(temperatureRequest));
+
+        assertThat(res.getTemperature(), closeTo(temperatureRequest.getTemperature(), 0.0001));
+        assertThat(res.getLat(), closeTo(coordinateRequest.getLat().doubleValue(), 0.0001));
+        assertThat(res.getLon(), closeTo(coordinateRequest.getLon().doubleValue(), 0.0001));
     }
 }
