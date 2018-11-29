@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  docker-mongo:
+    image: mongo
+    volumes:
+    - /poll/db/mongo
+    expose:
+    - 27017
+
+  app:
+    image: temperature-server
+    build:
+      context: ./server
+    links:
+    - docker-mongo
+    expose:
+    - 8080
+    environment:
+    - DATABASE_HOST=mongodb://docker-mongo/
