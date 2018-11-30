@@ -35,7 +35,7 @@ const AddTemperatureComponent = props => {
                         <label>Scale</label>
                         <select value={scale} onChange={e => setScale(e.target.value)}
                                 className="ui fluid search dropdown">
-                            {props.scaleOptions.map(val => <option>{val}</option>)}
+                            {props.scaleOptions.map((val, i) => <option key={i}>{val}</option>)}
                         </select>
                     </div>
                 </div>
