@@ -16,7 +16,7 @@ class App extends Component {
             lon: coordinates.lon
         };
         const response = await temperatureApi.get('/temperatures', {params});
-        this.setState({temperatures: response.data});
+        this.setState({temperatures: response.data._embedded.temperatures});
     };
 
     onAddSubmit = async temperature => {
@@ -33,6 +33,7 @@ class App extends Component {
     }
 
     render() {
+        console.log(this.state.temperatures);
         return (
             <div className="ui container">
                 <div className="ui grid">
