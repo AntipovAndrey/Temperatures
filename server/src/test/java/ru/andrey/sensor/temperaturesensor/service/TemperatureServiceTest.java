@@ -2,10 +2,7 @@ package ru.andrey.sensor.temperaturesensor.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.andrey.sensor.temperaturesensor.config.TemperatureProperties;
@@ -44,9 +41,6 @@ class TemperatureServiceTest {
     private TemperatureDtoMapper mapper;
 
     @Mock
-    private TemperatureProperties temperatureProperties;
-
-    @Mock
     private TemperatureProperties.Defaults defaults;
 
     @InjectMocks
@@ -56,10 +50,9 @@ class TemperatureServiceTest {
 
     @BeforeEach
     void setUp() {
+        TemperatureProperties temperatureProperties = Mockito.mock(TemperatureProperties.class);
         mapper = new TemperatureDtoMapper(temperatureProperties, new CoordinateDtoMapper());
-
         MockitoAnnotations.initMocks(this);
-
         temperatures = DoubleStream.iterate(0D, d -> d + 1.5)
                 .mapToObj(d -> new Temperature(
                         null, new Coordinate(d, d * 2), 3 * d, null, Instant.now()

@@ -11,6 +11,6 @@ data class Temperature(
         val id: String? = null,
         val coordinate: Coordinate,
         val temperature: Double,
-        var city: String?,
+        var city: String? = null,
         val time: Instant
 )
