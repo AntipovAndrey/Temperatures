@@ -29,9 +29,22 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     private Map<String, Set<String>> propertyToErrorMessage(List<FieldError> fieldErrors) {
         return fieldErrors.stream().collect(
-                Collectors.groupingBy(FieldError::getField,
+                Collectors.groupingBy(this::filterJacksonUnwrapped,
                         Collectors.mapping(FieldError::getDefaultMessage, Collectors.toSet())
                 )
         );
     }
+
+    private String filterJacksonUnwrapped(FieldError fieldError) {
+        String error = fieldError.getField();
+        if (error.contains("jacksonUnwrapped")) {
+            String[] split = error.split("\\.");
+            if (split.length < 2) {
+                return error;
+            }
+            return split[1];
+        }
+        return error;
+    }
+
 }
