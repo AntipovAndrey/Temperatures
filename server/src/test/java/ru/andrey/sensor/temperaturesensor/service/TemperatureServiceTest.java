@@ -35,6 +35,9 @@ class TemperatureServiceTest {
     private TemperatureRepository repository;
 
     @Mock
+    private TemperatureProperties temperatureProperties;
+
+    @Mock
     private LocationService locationService;
 
     @Spy
@@ -50,7 +53,7 @@ class TemperatureServiceTest {
 
     @BeforeEach
     void setUp() {
-        TemperatureProperties temperatureProperties = Mockito.mock(TemperatureProperties.class);
+        temperatureProperties = Mockito.mock(TemperatureProperties.class);
         mapper = new TemperatureDtoMapper(temperatureProperties, new CoordinateDtoMapper());
         MockitoAnnotations.initMocks(this);
         temperatures = DoubleStream.iterate(0D, d -> d + 1.5)
