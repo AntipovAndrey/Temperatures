@@ -9,9 +9,6 @@ public class CoordinateDtoMapper implements SimplexMapper<CoordinateRequest, Coo
 
     @Override
     public Coordinate toModel(CoordinateRequest dto) {
-        return Coordinate.builder()
-                .lat(dto.getLat().doubleValue())
-                .lon(dto.getLon().doubleValue())
-                .build();
+        return new Coordinate(dto.getLat().doubleValue(), dto.getLon().doubleValue());
     }
 }

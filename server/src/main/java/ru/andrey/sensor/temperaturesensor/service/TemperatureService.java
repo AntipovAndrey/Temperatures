@@ -47,7 +47,7 @@ public class TemperatureService {
     }
 
     public List<TemperatureResponse> getLatestInCity(double lon, double lat) {
-        return getCity(Coordinate.builder().lat(lat).lon(lon).build())
+        return getCity(new Coordinate(lat, lon))
                 .map(city -> temperatureRepository.findByCity(city, limitSort()))
                 .map(this::transformToResponse)
                 .orElseGet(this::getLatest);

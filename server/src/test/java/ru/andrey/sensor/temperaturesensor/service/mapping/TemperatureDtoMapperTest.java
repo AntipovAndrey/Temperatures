@@ -53,16 +53,9 @@ class TemperatureDtoMapperTest {
             }
         });
 
-        coordinateRequest = new CoordinateRequest() {{
-            setLat(BigDecimal.ONE);
-            setLon(BigDecimal.TEN);
-        }};
+        coordinateRequest = new CoordinateRequest(BigDecimal.ONE, BigDecimal.TEN);
 
-        temperatureRequest = new TemperatureRequest() {{
-            setCoordinateRequest(coordinateRequest);
-            setTemperature(42D);
-            setScale("F");
-        }};
+        temperatureRequest = new TemperatureRequest(coordinateRequest, "F", 42);
     }
 
     @Test

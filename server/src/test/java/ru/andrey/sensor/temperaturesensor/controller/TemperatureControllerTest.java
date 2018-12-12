@@ -57,7 +57,7 @@ class TemperatureControllerTest {
     }
 
     @Test
-    void when_request_is_valid_then_send_400() throws Exception {
+    void when_request_is_invalid_then_send_400() throws Exception {
         //@formatter:off
         given()
             .standaloneSetup(controller)

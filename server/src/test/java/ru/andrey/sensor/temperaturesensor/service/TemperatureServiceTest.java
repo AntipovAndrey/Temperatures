@@ -61,12 +61,9 @@ class TemperatureServiceTest {
         MockitoAnnotations.initMocks(this);
 
         temperatures = DoubleStream.iterate(0D, d -> d + 1.5)
-                .mapToObj(d -> Temperature.builder()
-                        .coordinate(Coordinate.builder().lat(d).lon(2 * d).build())
-                        .time(Instant.now())
-                        .city("City" + d)
-                        .temperature(3 * d)
-                        .build())
+                .mapToObj(d -> new Temperature(
+                        null, new Coordinate(d, d * 2), 3 * d, null, Instant.now()
+                ))
                 .limit(10)
                 .collect(Collectors.toList());
 
@@ -89,16 +86,8 @@ class TemperatureServiceTest {
 
     @Test
     void test_service_stores_temperature() {
-        TemperatureRequest temperatureRequest = new TemperatureRequest() {{
-            setCoordinateRequest(
-                    new CoordinateRequest() {{
-                        setLat(BigDecimal.ONE);
-                        setLon(BigDecimal.TEN);
-                    }}
-            );
-            setTemperature(10D);
-            setScale("C");
-        }};
+        TemperatureRequest temperatureRequest = new TemperatureRequest(
+                new CoordinateRequest(BigDecimal.ONE, BigDecimal.TEN), "F", 42);
 
         service.store(temperatureRequest);
 

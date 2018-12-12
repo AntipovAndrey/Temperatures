@@ -25,21 +25,21 @@ public class TemperatureDtoMapper implements DuplexMapper<TemperatureRequest, Te
 
     @Override
     public Temperature toModel(TemperatureRequest temperatureDto) {
-        return Temperature.builder()
-                .coordinate(coordinatesMapper.toModel(temperatureDto.getCoordinateRequest()))
-                .temperature(scaled(temperatureDto.getTemperature(), temperatureDto.getScale()))
-                .time(Instant.now())
-                .build();
+        return new Temperature(
+                null,
+                coordinatesMapper.toModel(temperatureDto.getCoordinateRequest()),
+                scaled(temperatureDto.getTemperature(), temperatureDto.getScale()),
+                null,
+                Instant.now());
     }
 
     @Override
     public TemperatureResponse fromModel(Temperature temperature) {
-        return TemperatureResponse.builder()
-                .lat(temperature.getCoordinate().getLat())
-                .lon(temperature.getCoordinate().getLon())
-                .temperature(temperature.getTemperature())
-                .time(temperature.getTime())
-                .build();
+        return new TemperatureResponse(
+                temperature.getCoordinate().getLat(),
+                temperature.getCoordinate().getLon(),
+                temperature.getTemperature(),
+                temperature.getTime());
     }
 
     private double scaled(Double temperature, String scaleString) {
