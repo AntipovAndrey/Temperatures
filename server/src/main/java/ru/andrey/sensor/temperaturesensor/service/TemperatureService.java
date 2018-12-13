@@ -60,7 +60,7 @@ public class TemperatureService {
     }
 
     private Optional<String> getCity(Coordinate coordinate) {
-        return locationService.findCityByCoordinates(coordinate);
+        return Optional.ofNullable(locationService.findCityByCoordinates(coordinate));
     }
 
     private PageRequest limitSort() {

@@ -19,7 +19,6 @@ import ru.andrey.sensor.temperaturesensor.service.mapping.TemperatureDtoMapper;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -66,7 +65,7 @@ class TemperatureServiceTest {
         when(defaults.getScale()).thenReturn(Scale.C);
         when(temperatureProperties.getDefaults()).thenReturn(defaults);
         when(temperatureProperties.getMaxRecords()).thenReturn(temperatures.size());
-        when(locationService.findCityByCoordinates(any())).thenReturn(Optional.empty());
+        when(locationService.findCityByCoordinates(any())).thenReturn(null);
         when(repository.findAll((Pageable) any())).thenReturn(new PageImpl<>(temperatures));
     }
 
