@@ -28,10 +28,10 @@ class TemperatureController constructor(val temperatureService: TemperatureServi
         val self: Link
 
         if (lat == null || lon == null) {
-            latest = temperatureService.latest;
+            latest = temperatureService.latest();
             self = linkTo(methodOn(TemperatureController::class.java).getLastRecords(lon, lat)).withSelfRel().expand();
         } else {
-            latest = temperatureService.getLatestInCity(lon, lat);
+            latest = temperatureService.latestInCity(lon, lat);
             self = linkTo(methodOn(TemperatureController::class.java).getLastRecords(lon, lat)).withSelfRel();
         }
 

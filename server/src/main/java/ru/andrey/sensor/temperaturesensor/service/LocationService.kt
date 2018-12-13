@@ -8,7 +8,7 @@ import ru.andrey.sensor.temperaturesensor.config.GeoLocationProperties
 import ru.andrey.sensor.temperaturesensor.model.Coordinate
 
 @Service
-class LocationService(val geoProps: GeoLocationProperties) {
+class LocationService(private val geoProps: GeoLocationProperties) {
 
     fun findCityByCoordinates(coordinate: Coordinate): String? {
         val restTemplate = RestTemplate()

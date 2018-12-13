@@ -71,7 +71,7 @@ class TemperatureServiceTest {
 
     @Test
     void test_list_of_all_temperatures_was_transformed() {
-        List<TemperatureResponse> latest = service.getLatest();
+        List<TemperatureResponse> latest = service.latest();
 
         verify(repository).findAll((Pageable) any());
         verify(mapper, atLeast(1)).fromModel(any());
@@ -93,7 +93,7 @@ class TemperatureServiceTest {
 
     @Test
     void when_no_city_found_then_return_all() {
-        List<TemperatureResponse> latest = service.getLatestInCity(13, 37);
+        List<TemperatureResponse> latest = service.latestInCity(13, 37);
 
         verify(repository).findAll((Pageable) any());
         verify(repository, never()).findByCity(anyString(), any());
