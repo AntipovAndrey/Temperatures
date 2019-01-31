@@ -6,8 +6,8 @@ import java.time.Instant
 
 @Relation(value = "temperature", collectionRelation = "temperatures")
 data class TemperatureResponse(
-        var lat: Double,
-        var lon: Double,
-        var temperature: Double,
-        var time: Instant
+        val lat: Double,
+        val lon: Double,
+        val temperature: Double,
+        val time: Instant
 ) : ResourceSupport()

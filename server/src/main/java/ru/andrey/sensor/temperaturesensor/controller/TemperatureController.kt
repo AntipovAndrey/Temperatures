@@ -1,4 +1,4 @@
-package ru.andrey.sensor.temperaturesensor.controller;
+package ru.andrey.sensor.temperaturesensor.controller
 
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.MediaTypes
@@ -15,26 +15,30 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping(value = ["temperatures"], produces = [MediaTypes.HAL_JSON_VALUE])
-class TemperatureController constructor(val temperatureService: TemperatureService) {
+class TemperatureController(
+        private val temperatureService: TemperatureService
+) {
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun addTemperature(@Valid @RequestBody temperature: TemperatureRequest) = temperatureService.store(temperature)
 
     @GetMapping
-    fun getLastRecords(@RequestParam(value = "lon", required = false) lon: Double?,
-                       @RequestParam(value = "lat", required = false) lat: Double?): Resources<TemperatureResponse> {
+    fun getLastRecords(
+            @RequestParam(value = "lon", required = false) lon: Double?,
+            @RequestParam(value = "lat", required = false) lat: Double?
+    ): Resources<TemperatureResponse> {
         val latest: List<TemperatureResponse>
         val self: Link
 
         if (lat == null || lon == null) {
-            latest = temperatureService.latest();
-            self = linkTo(methodOn(TemperatureController::class.java).getLastRecords(lon, lat)).withSelfRel().expand();
+            latest = temperatureService.latest()
+            self = linkTo(methodOn(TemperatureController::class.java).getLastRecords(lon, lat)).withSelfRel().expand()
         } else {
-            latest = temperatureService.latestInCity(lon, lat);
-            self = linkTo(methodOn(TemperatureController::class.java).getLastRecords(lon, lat)).withSelfRel();
+            latest = temperatureService.latestInCity(lon, lat)
+            self = linkTo(methodOn(TemperatureController::class.java).getLastRecords(lon, lat)).withSelfRel()
         }
 
-        return Resources(latest).apply { add(self) };
+        return Resources(latest).apply { add(self) }
     }
 }

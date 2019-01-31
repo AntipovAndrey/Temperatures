@@ -7,10 +7,12 @@ import java.time.Instant
 
 @Document
 data class Temperature(
-        @field:Id
-        val id: String? = null,
         val coordinate: Coordinate,
         val temperature: Double,
-        var city: String? = null,
         val time: Instant
-)
+) {
+
+    @field:Id
+    var id: String? = null
+    var city: String? = null
+}

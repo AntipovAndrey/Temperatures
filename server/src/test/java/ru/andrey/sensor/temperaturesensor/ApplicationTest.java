@@ -38,7 +38,7 @@ class ApplicationTest {
             .contentType(MediaType.APPLICATION_JSON_VALUE)
         .when()
             .post("/temperatures")
-             .prettyPeek()
+            .prettyPeek()
         .then()
             .body("lat[0]", containsString("must"))
             .statusCode(HttpStatus.SC_BAD_REQUEST);

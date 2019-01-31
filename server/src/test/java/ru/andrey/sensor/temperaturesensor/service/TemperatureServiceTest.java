@@ -57,7 +57,7 @@ class TemperatureServiceTest {
         MockitoAnnotations.initMocks(this);
         temperatures = DoubleStream.iterate(0D, d -> d + 1.5)
                 .mapToObj(d -> new Temperature(
-                        null, new Coordinate(d, d * 2), 3 * d, null, Instant.now()
+                        new Coordinate(d, d * 2), 3 * d, Instant.now()
                 ))
                 .limit(10)
                 .collect(Collectors.toList());

@@ -12,10 +12,12 @@ import ru.andrey.sensor.temperaturesensor.repository.TemperatureRepository
 import ru.andrey.sensor.temperaturesensor.service.mapping.TemperatureDtoMapper
 
 @Service
-class TemperatureService(private val temperatureProperties: TemperatureProperties,
-                         private val temperatureRepository: TemperatureRepository,
-                         private val locationService: LocationService,
-                         private val mapper: TemperatureDtoMapper) {
+class TemperatureService(
+        private val temperatureProperties: TemperatureProperties,
+        private val temperatureRepository: TemperatureRepository,
+        private val locationService: LocationService,
+        private val mapper: TemperatureDtoMapper
+) {
 
     fun latest() = transformToResponse(temperatureRepository.findAll(limitSort()))
 
@@ -29,10 +31,10 @@ class TemperatureService(private val temperatureProperties: TemperaturePropertie
         return getCity(Coordinate(lat = lat, lon = lon))
                 ?.let { city ->
                     transformToResponse(temperatureRepository.findByCity(city, limitSort()))
-                } ?: latest();
+                } ?: latest()
     }
 
-    private fun transformToResponse(list: Iterable<Temperature>) = list.map { mapper.fromModel(it) }.toList();
+    private fun transformToResponse(list: Iterable<Temperature>) = list.map { mapper.fromModel(it) }.toList()
 
     private fun getCity(coordinate: Coordinate): String? = locationService.findCityByCoordinates(coordinate)
 
